@@ -55,12 +55,48 @@ reported saving is a floor.
 
 ## Setup
 
-Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/). Fare data comes
-from [SerpApi's Google Flights endpoint](https://serpapi.com/google-flights-api);
-the free plan allows 100 searches/month.
+Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/). No third-party
+Python packages — everything runs on the standard library.
 
-Put your key in `SERPAPI_KEY.txt` beside the scripts (it's gitignored), or set
-`SERPAPI_KEY` in the environment.
+### Getting an API key
+
+Fare data comes from [SerpApi's Google Flights
+API](https://serpapi.com/google-flights-api), which returns structured
+itineraries including flight number, aircraft type, cabin, and price. Sign up
+at **<https://serpapi.com/users/sign_up>**.
+
+As of August 2026 the free plan includes:
+
+| | Free plan |
+|---|---|
+| Searches | **250 per month** |
+| Throughput | 50 per hour |
+| Cost | $0, no time limit |
+| Paid tiers | from $25/mo for 1,000 searches |
+
+Unused searches don't roll over; the allowance resets monthly. Check current
+terms at <https://serpapi.com/pricing> — this tier was raised from 100 to 250
+in 2026, so the numbers above may have moved again.
+
+The hourly throughput cap is the one that bites in practice. A sweep costs
+`dates x cabins x party sizes` searches, so a 10-date, 3-party pull is 30
+requests per direction — fine. A 20-date sweep at 3 party sizes is 60 and will
+hit the hourly ceiling partway through. `fetch_flights.py` paces itself at one
+request per second and retries transient failures, but it won't wait out an
+hourly limit; split large pulls into separate runs.
+
+You can check your remaining balance any time:
+
+```bash
+curl -s "https://serpapi.com/account?api_key=$(cat SERPAPI_KEY.txt)" \
+  | python3 -m json.tool | grep -E 'usage|left'
+```
+
+### Storing the key
+
+Put it in `SERPAPI_KEY.txt` beside the scripts — that filename is gitignored.
+Alternatively set `SERPAPI_KEY` in the environment, or point `--key-file`
+anywhere you like. The key is never written to the output CSVs.
 
 ## Usage
 
