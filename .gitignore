@@ -1,0 +1,11 @@
+claude-tmp/
+
+# API credentials - never commit
+SERAPI_KEY.txt
+SERPAPI_KEY.txt
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/

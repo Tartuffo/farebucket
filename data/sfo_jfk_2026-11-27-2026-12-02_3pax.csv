@@ -1,0 +1,358 @@
+date,airline,flight,depart,arrive,arrives_next_day,aircraft,cabin,price,adults,stops,notes
+2026-11-27,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,294,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,587,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,881,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,269,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,537,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,806,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,364,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-27,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,727,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-27,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,1091,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-27,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,283,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,565,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,848,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,269,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,537,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,806,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,709,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,1417,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,2126,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,301,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,602,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,903,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 1216,11:25 AM,8:00 PM,false,Airbus A320,Economy,735,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 1216,11:25 AM,8:00 PM,false,Airbus A320,Economy,1470,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 1216,11:25 AM,8:00 PM,false,Airbus A320,Economy,2204,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,209,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,417,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,626,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,364,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-27,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,727,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-27,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,1091,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-27,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,283,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,565,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,848,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,459,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-27,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,917,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-27,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,1376,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-27,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,944,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,1888,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,2832,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,209,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,417,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,626,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,294,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,587,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,881,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,283,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,565,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,848,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Delta,DL 670,10:30 PM,6:56 AM,true,Boeing 767,Economy,459,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Delta,DL 670,10:30 PM,6:56 AM,true,Boeing 767,Economy,917,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Delta,DL 670,10:30 PM,6:56 AM,true,Boeing 767,Economy,1376,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,269,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,537,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,806,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,294,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,587,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-27,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,881,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,696,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,1391,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,2086,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,659,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,1317,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,1976,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,799,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,1597,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,2396,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,770,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,1297,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,1946,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,659,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,1317,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,1976,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,799,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,1597,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,2396,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,949,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,1898,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,2847,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,770,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,1297,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,1946,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,799,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,1597,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,2396,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,770,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,1297,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,1946,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,799,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,1597,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,2396,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,469,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,937,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,1406,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,770,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,1297,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,1946,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,549,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,1097,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,1646,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,696,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,1391,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,2086,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 2112,9:40 PM,6:04 AM,true,Boeing 767,Economy,549,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 2112,9:40 PM,6:04 AM,true,Boeing 767,Economy,1097,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 2112,9:40 PM,6:04 AM,true,Boeing 767,Economy,1646,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,770,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,1297,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,1946,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,659,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 670,11:00 PM,7:26 AM,true,Boeing 767,Economy,684,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,1317,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 670,11:00 PM,7:26 AM,true,Boeing 767,Economy,1367,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,1976,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-28,Delta,DL 670,11:00 PM,7:26 AM,true,Boeing 767,Economy,2051,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-28,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,813,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,1625,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-28,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,2437,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,1147,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,2294,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,3441,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,659,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,1317,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,1976,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,829,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,1657,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,2486,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,689,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,1377,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,2066,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,1304,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,2607,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,3911,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,1044,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,2087,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,3131,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,1147,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,2294,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,3441,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 1216,11:25 AM,8:00 PM,false,Airbus A320,Economy,1147,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 1216,11:25 AM,8:00 PM,false,Airbus A320,Economy,2294,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 1216,11:25 AM,8:00 PM,false,Airbus A320,Economy,3441,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,689,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,1377,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,2066,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,1044,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,2087,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,3131,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,689,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,1377,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,2066,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,829,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,1657,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,3131,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,1147,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,2294,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,3441,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,689,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,1377,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,2066,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,829,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,1657,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,2486,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,1147,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,2294,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,3441,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 2112,9:40 PM,6:04 AM,true,Boeing 767,Economy,829,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 2112,9:40 PM,6:04 AM,true,Boeing 767,Economy,1657,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 2112,9:40 PM,6:04 AM,true,Boeing 767,Economy,2486,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,689,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,1377,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,2066,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,659,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 670,11:00 PM,7:26 AM,true,Boeing 767,Economy,829,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,1317,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 670,11:00 PM,7:26 AM,true,Boeing 767,Economy,1657,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,1976,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-29,Delta,DL 670,11:00 PM,7:26 AM,true,Boeing 767,Economy,2486,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-29,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,1147,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,2294,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-29,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,3441,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,696,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,1391,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,2086,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,508,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,1015,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,1523,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,539,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,1077,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,1616,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,524,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,1047,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,1571,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,659,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,1317,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,1976,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,674,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,1347,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,2021,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,696,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,1391,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 416,10:25 AM,6:59 PM,false,Airbus A320,Economy,2086,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 1216,11:25 AM,8:00 PM,false,Airbus A320,Economy,696,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 1216,11:25 AM,8:00 PM,false,Airbus A320,Economy,1391,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 1216,11:25 AM,8:00 PM,false,Airbus A320,Economy,2086,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,524,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,1047,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,1571,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,539,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,1077,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,1616,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,524,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,1047,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,1571,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,674,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,1347,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,2021,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,469,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,937,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 16,3:25 PM,11:55 PM,false,Airbus A320,Economy,1406,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,524,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,1047,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,1571,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,789,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,1577,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,2366,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,469,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,937,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 1016,8:40 PM,5:08 AM,true,Airbus A320,Economy,1406,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 2112,9:40 PM,6:04 AM,true,Boeing 767,Economy,494,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 2112,9:40 PM,6:04 AM,true,Boeing 767,Economy,987,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 2112,9:40 PM,6:04 AM,true,Boeing 767,Economy,1481,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,524,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,1047,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,1571,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 670,11:00 PM,7:26 AM,true,Boeing 767,Economy,494,1,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,508,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 670,11:00 PM,7:26 AM,true,Boeing 767,Economy,987,2,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,1015,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,Delta,DL 670,11:00 PM,7:26 AM,true,Boeing 767,Economy,1481,3,0,Average legroom (31 in); In-seat USB outlet
+2026-11-30,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,1523,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,469,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,937,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-11-30,JetBlue,B6 616,11:30 PM,8:00 AM,true,Airbus A320,Economy,1406,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,339,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,677,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,1016,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,252,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,504,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,756,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,344,1,0,Average legroom (31 in); In-seat USB outlet
+2026-12-01,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,687,2,0,Average legroom (31 in); In-seat USB outlet
+2026-12-01,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,1031,3,0,Average legroom (31 in); In-seat USB outlet
+2026-12-01,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,394,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,787,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 234,7:26 AM,4:00 PM,false,Airbus A321 (Sharklets),Economy,1181,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,262,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,526,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,790,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,344,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,687,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,1031,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 416,10:50 AM,7:24 PM,false,Airbus A320,Economy,704,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 416,10:50 AM,7:24 PM,false,Airbus A320,Economy,1408,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 416,10:50 AM,7:24 PM,false,Airbus A320,Economy,2112,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,394,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,787,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 16,11:45 AM,8:30 PM,false,Airbus A321neo,Economy,1181,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,344,1,0,Average legroom (31 in); In-seat USB outlet
+2026-12-01,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,687,2,0,Average legroom (31 in); In-seat USB outlet
+2026-12-01,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,1031,3,0,Average legroom (31 in); In-seat USB outlet
+2026-12-01,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,394,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,787,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 166,1:10 PM,9:55 PM,false,Airbus A321neo,Economy,1181,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 16,1:20 PM,10:00 PM,false,Airbus A320,Economy,339,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 16,1:20 PM,10:00 PM,false,Airbus A320,Economy,677,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 16,1:20 PM,10:00 PM,false,Airbus A320,Economy,1016,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,344,1,0,Average legroom (31 in); In-seat USB outlet
+2026-12-01,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,687,2,0,Average legroom (31 in); In-seat USB outlet
+2026-12-01,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,1031,3,0,Average legroom (31 in); In-seat USB outlet
+2026-12-01,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,394,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,787,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 148,3:40 PM,12:25 AM,true,Airbus A321neo,Economy,1181,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,344,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,687,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,1031,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 1016,9:30 PM,6:00 AM,true,Airbus A320,Economy,294,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 1016,9:30 PM,6:00 AM,true,Airbus A320,Economy,587,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 1016,9:30 PM,6:00 AM,true,Airbus A320,Economy,881,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,394,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,787,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,American,AA 276,9:45 PM,6:20 AM,true,Airbus A321 (Sharklets),Economy,1181,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 670,10:30 PM,6:56 AM,true,Boeing 767,Economy,394,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 670,10:30 PM,6:56 AM,true,Boeing 767,Economy,787,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Delta,DL 670,10:30 PM,6:56 AM,true,Boeing 767,Economy,1181,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,252,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,504,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,756,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 616,11:32 PM,8:03 AM,true,Airbus A320,Economy,294,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 616,11:32 PM,8:03 AM,true,Airbus A320,Economy,587,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-01,JetBlue,B6 616,11:32 PM,8:03 AM,true,Airbus A320,Economy,881,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,259,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,517,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 816,6:00 AM,2:30 PM,false,Airbus A320,Economy,776,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,229,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,457,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Alaska,AS 30,6:18 AM,3:03 PM,false,Boeing 737,Economy,686,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,344,1,0,Average legroom (31 in); In-seat USB outlet
+2026-12-02,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,687,2,0,Average legroom (31 in); In-seat USB outlet
+2026-12-02,Delta,DL 405,7:00 AM,3:31 PM,false,Boeing 767,Economy,1031,3,0,Average legroom (31 in); In-seat USB outlet
+2026-12-02,American,AA 234,7:04 AM,3:45 PM,false,Airbus A321 (Sharklets),Economy,180,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 234,7:04 AM,3:45 PM,false,Airbus A321 (Sharklets),Economy,417,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 234,7:04 AM,3:45 PM,false,Airbus A321 (Sharklets),Economy,626,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,180,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,360,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Alaska,AS 1543,9:05 AM,5:49 PM,false,Boeing 737,Economy,542,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,344,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,687,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 383,9:10 AM,5:44 PM,false,Boeing 757,Economy,1031,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 16,10:29 AM,7:10 PM,false,Airbus A321 (Sharklets),Economy,209,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 16,10:29 AM,7:10 PM,false,Airbus A321 (Sharklets),Economy,417,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 16,10:29 AM,7:10 PM,false,Airbus A321 (Sharklets),Economy,626,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 416,10:50 AM,7:24 PM,false,Airbus A320,Economy,339,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 416,10:50 AM,7:24 PM,false,Airbus A320,Economy,677,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 416,10:50 AM,7:24 PM,false,Airbus A320,Economy,1016,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,American,AA 166,11:24 AM,8:05 PM,false,Airbus A321 (Sharklets),Economy,209,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 166,11:24 AM,8:05 PM,false,Airbus A321 (Sharklets),Economy,417,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 166,11:24 AM,8:05 PM,false,Airbus A321 (Sharklets),Economy,821,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,344,1,0,Average legroom (31 in); In-seat USB outlet
+2026-12-02,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,687,2,0,Average legroom (31 in); In-seat USB outlet
+2026-12-02,Delta,DL 668,11:50 AM,8:20 PM,false,Boeing 767,Economy,1031,3,0,Average legroom (31 in); In-seat USB outlet
+2026-12-02,JetBlue,B6 16,1:20 PM,10:00 PM,false,Airbus A320,Economy,180,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 16,1:20 PM,10:00 PM,false,Airbus A320,Economy,359,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 16,1:20 PM,10:00 PM,false,Airbus A320,Economy,539,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,344,1,0,Average legroom (31 in); In-seat USB outlet
+2026-12-02,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,687,2,0,Average legroom (31 in); In-seat USB outlet
+2026-12-02,Delta,DL 669,2:00 PM,10:29 PM,false,Boeing 767,Economy,1031,3,0,Average legroom (31 in); In-seat USB outlet
+2026-12-02,American,AA 148,3:09 PM,11:50 PM,false,Airbus A321neo,Economy,180,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 148,3:09 PM,11:50 PM,false,Airbus A321neo,Economy,359,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 148,3:09 PM,11:50 PM,false,Airbus A321neo,Economy,539,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,344,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,687,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 363,4:00 PM,12:28 AM,true,Boeing 767,Economy,1031,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 276,9:23 PM,6:00 AM,true,Airbus A321 (Sharklets),Economy,209,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 276,9:23 PM,6:00 AM,true,Airbus A321 (Sharklets),Economy,417,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,American,AA 276,9:23 PM,6:00 AM,true,Airbus A321 (Sharklets),Economy,626,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 1016,9:30 PM,6:00 AM,true,Airbus A320,Economy,234,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 1016,9:30 PM,6:00 AM,true,Airbus A320,Economy,467,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 1016,9:30 PM,6:00 AM,true,Airbus A320,Economy,701,3,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 670,10:30 PM,6:56 AM,true,Boeing 767,Economy,344,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 670,10:30 PM,6:56 AM,true,Boeing 767,Economy,687,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Delta,DL 670,10:30 PM,6:56 AM,true,Boeing 767,Economy,1031,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,233,1,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,467,2,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,Alaska,AS 29,11:00 PM,7:46 AM,true,Boeing 737,Economy,702,3,0,Average legroom (31 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 616,11:32 PM,8:03 AM,true,Airbus A320,Economy,234,1,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 616,11:32 PM,8:03 AM,true,Airbus A320,Economy,467,2,0,Above average legroom (32 in); In-seat power & USB outlets
+2026-12-02,JetBlue,B6 616,11:32 PM,8:03 AM,true,Airbus A320,Economy,701,3,0,Above average legroom (32 in); In-seat power & USB outlets
