@@ -1,0 +1,16 @@
+{
+  "include": [
+    "fare_data.py",
+    "fetch_flights.py",
+    "summarize.py",
+    "analyze_trips.py",
+    "tests"
+  ],
+  "exclude": [
+    "codex-tmp",
+    "data"
+  ],
+  "pythonVersion": "3.12",
+  "typeCheckingMode": "strict",
+  "reportMissingTypeStubs": false
+}

@@ -1,150 +1,80 @@
-"""Render a swept fare CSV as a per-day table with one column per party size.
-
-For a party of N, let f_k be the cheapest per-seat fare in a bucket holding at
-least k seats, so f_k = P(k) / k. These rise monotonically with k. Booking the
-party together costs N * f_N. Booking seats in separate transactions costs at
-most sum(f_1..f_N), because after k-1 seats are taken the f_k bucket provably
-still has one left. The reported price is the cheaper of the two, marked with
-an asterisk when splitting wins.
-
-Examples:
-    uv run python summarize.py data/sfo_jfk_2026-12-04_3pax.csv \\
-        --parties 2 3 --earliest-depart 08:00 --max-price 1600
-"""
+"""Render swept fare data as per-day tables of observed per-seat prices."""
 
 from __future__ import annotations
 
 import argparse
-import csv
-import re
-from collections import defaultdict
-from dataclasses import dataclass
-from datetime import date, datetime, time
+from datetime import date, time
+from fractions import Fraction
 from pathlib import Path
-from typing import TypedDict, cast
+from typing import cast
 
-FILENAME_PATTERN = re.compile(r"^([a-z]{3})_([a-z]{3})_")
+from fare_data import (
+    FareDataError,
+    FareDataset,
+    Flight,
+    arrival_suffix,
+    format_clock,
+    format_money,
+    group_by_date,
+    load_dataset,
+)
 
-
-class FareRow(TypedDict):
-    date: str
-    airline: str
-    flight: str
-    depart: str
-    arrive: str
-    arrives_next_day: str
-    aircraft: str
-    cabin: str
-    price: str
-    adults: str
-    stops: str
-    notes: str
-
-
-@dataclass(frozen=True)
-class Flight:
-    flight_date: date
-    airline: str
-    flight: str
-    depart: time
-    arrive: time
-    arrives_next_day: bool
-    aircraft: str
-    cabin: str
-    stops: int
-    notes: str
-    fares: dict[int, int]
-
-    def seat_fare(self, seats: int) -> int | None:
-        """Per-seat price in the cheapest bucket holding at least `seats`."""
-        total = self.fares.get(seats)
-        return round(total / seats) if total is not None else None
-
-    def together(self, party: int) -> int | None:
-        """Per-person cost with the whole party on one reservation."""
-        return self.seat_fare(party)
-
-    def split(self, party: int) -> int | None:
-        """Per-person cost bound when each seat is bought separately."""
-        fares = [self.seat_fare(k) for k in range(1, party + 1)]
-        if any(fare is None for fare in fares):
-            return None
-        return round(sum(cast(list[int], fares)) / party)
-
-    def best(self, party: int) -> int | None:
-        """Cheaper of booking together versus booking separately."""
-        options = [value for value in (self.together(party), self.split(party)) if value]
-        return min(options) if options else None
-
-    def wants_split(self, party: int) -> bool:
-        """True when separate reservations beat one shared reservation."""
-        together, split = self.together(party), self.split(party)
-        return together is not None and split is not None and split < together
-
-
-def parse_clock(raw: str) -> time:
-    """Parse a clock cell such as '6:00 AM'.
+def positive_int(raw: str) -> int:
+    """Parse a positive command-line integer.
 
     Args:
-        raw: Time text.
+        raw: Argument text.
 
     Returns:
-        Parsed time of day.
+        A positive integer.
+
+    Raises:
+        argparse.ArgumentTypeError: If the value is not positive.
     """
-    return datetime.strptime(raw.strip(), "%I:%M %p").time()
+    try:
+        value = int(raw)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"expected an integer, got {raw!r}") from exc
+    if value <= 0:
+        raise argparse.ArgumentTypeError("value must be greater than zero")
+    return value
 
-
-def load_flights(path: Path) -> list[Flight]:
-    """Read a swept CSV, collapsing party-size rows into one record per flight.
+def iso_date(raw: str) -> date:
+    """Parse an ISO date command-line value.
 
     Args:
-        path: CSV produced by fetch_flights.py.
+        raw: Date text in YYYY-MM-DD format.
 
     Returns:
-        One Flight per distinct flight, carrying every party-size fare.
+        Parsed date.
+
+    Raises:
+        argparse.ArgumentTypeError: If the value is not an ISO date.
     """
-    with path.open(newline="", encoding="utf-8") as handle:
-        rows = cast(list[FareRow], list(csv.DictReader(handle)))
+    try:
+        return date.fromisoformat(raw)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"expected YYYY-MM-DD, got {raw!r}") from exc
 
-    grouped: dict[tuple[str, str, str], list[FareRow]] = defaultdict(list)
-    for row in rows:
-        grouped[(row["date"], row["flight"], row["depart"])].append(row)
-
-    flights: list[Flight] = []
-    for group in grouped.values():
-        head = group[0]
-        flights.append(
-            Flight(
-                flight_date=date.fromisoformat(head["date"]),
-                airline=head["airline"],
-                flight=head["flight"],
-                depart=parse_clock(head["depart"]),
-                arrive=parse_clock(head["arrive"]),
-                arrives_next_day=head["arrives_next_day"].lower() == "true",
-                aircraft=head["aircraft"],
-                cabin=head["cabin"].replace(" Class", ""),
-                stops=int(head["stops"]),
-                notes=head["notes"].split(";")[0].strip(),
-                fares={int(row["adults"]): int(row["price"]) for row in group},
-            )
-        )
-    return sorted(flights, key=lambda f: (f.flight_date, f.depart))
-
-
-def route_from_filename(path: Path) -> str:
-    """Recover the route label from the generated filename.
+def iso_clock(raw: str) -> time:
+    """Parse an ISO clock command-line value.
 
     Args:
-        path: CSV path such as sfo_jfk_2026-12-04_3pax.csv.
+        raw: Time text in HH:MM format.
 
     Returns:
-        A label like 'SFO -> JFK', or a placeholder when unparseable.
-    """
-    match = FILENAME_PATTERN.match(path.name)
-    if not match:
-        return "??? -> ???"
-    return f"{match.group(1).upper()} -> {match.group(2).upper()}"
+        Parsed time.
 
+    Raises:
+        argparse.ArgumentTypeError: If the value is not a clock time.
+    """
+    try:
+        parsed = time.fromisoformat(raw)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"expected HH:MM, got {raw!r}") from exc
+    if parsed.second or parsed.microsecond:
+        raise argparse.ArgumentTypeError("time must use HH:MM precision")
+    return parsed
 
 def keeps(
     flight: Flight,
@@ -154,15 +84,15 @@ def keeps(
     latest: time | None,
     same_day: bool,
 ) -> bool:
-    """Apply the schedule and budget constraints to one flight.
+    """Apply schedule and budget constraints to one flight.
 
     Args:
         flight: Candidate flight.
         parties: Party sizes being reported.
-        max_price: Per-person cap, applied to the cheapest party column.
+        max_price: Per-person cap, applied to the cheapest requested party.
         earliest: Earliest acceptable departure.
-        latest: Latest acceptable arrival.
-        same_day: Whether next-day arrivals are rejected.
+        latest: Latest acceptable same-day arrival.
+        same_day: Whether later-day arrivals are rejected.
 
     Returns:
         True when the flight satisfies every constraint.
@@ -171,127 +101,217 @@ def keeps(
         return False
     if earliest and flight.depart < earliest:
         return False
-    if latest and not flight.arrives_next_day and flight.arrive > latest:
+    if latest and (flight.arrives_next_day or flight.arrive > latest):
         return False
     if max_price is not None:
-        prices = [flight.best(p) for p in parties]
-        usable = [value for value in prices if value is not None]
-        if not usable or min(usable) > max_price:
+        prices = [flight.best_per_person(party) for party in parties]
+        usable = [price for price in prices if price is not None]
+        if not usable or min(usable) > Fraction(max_price):
             return False
     return True
 
-
 def render(flights: list[Flight], parties: list[int], route: str, day: date) -> str:
-    """Build the fixed-width table.
+    """Build a fixed-width per-seat fare table for one departure date.
 
     Args:
-        flights: Flights to show, already filtered and sorted.
-        parties: Party sizes to include as price columns.
+        flights: Flights from a single date, already filtered and sorted.
+        parties: Party-size searches to show as per-seat columns.
         route: Route label.
-        day: The date being reported.
+        day: Departure date being reported.
 
     Returns:
-        The formatted table.
+        Formatted table text.
     """
-    price_columns = [f"PPx{p}" for p in parties]
-    columns = ("Airline", "Flight", "Depart", "Arrive", "Aircraft", "Cabin", *price_columns, "Notes")
-
+    price_columns = [f"PP@{party}" for party in parties]
+    columns = (
+        "Airline",
+        "Flight",
+        "Depart",
+        "Arrive",
+        "Aircraft",
+        "Cabin",
+        *price_columns,
+        "Notes",
+    )
     cells: list[tuple[str, ...]] = []
-    for f in flights:
+    for flight in flights:
         prices: list[str] = []
         for party in parties:
-            value = f.best(party)
-            prices.append(f"${value:,}" + ("*" if f.wants_split(party) else "") if value else "-")
+            value = flight.seat_fare(party)
+            if value is None:
+                prices.append("-")
+                continue
+            marker = "*" if flight.wants_split(party) else ""
+            prices.append(f"{format_money(value, always_cents=True)}{marker}")
         cells.append(
             (
-                f.airline,
-                f.flight,
-                f.depart.strftime("%-I:%M %p"),
-                f.arrive.strftime("%-I:%M %p") + ("+1" if f.arrives_next_day else ""),
-                f.aircraft,
-                f.cabin,
+                flight.airline,
+                flight.flight,
+                format_clock(flight.depart),
+                f"{format_clock(flight.arrive)}{arrival_suffix(flight)}",
+                flight.aircraft,
+                flight.cabin,
                 *prices,
-                f.notes,
+                flight.notes,
             )
         )
 
     widths = [
-        max(len(columns[i]), max((len(row[i]) for row in cells), default=0))
-        for i in range(len(columns))
+        max(len(columns[index]), max((len(row[index]) for row in cells), default=0))
+        for index in range(len(columns))
     ]
 
     def line(values: tuple[str, ...]) -> str:
         parts = [
-            values[i].rjust(widths[i])
-            if columns[i].startswith("PPx")
-            else values[i].ljust(widths[i])
-            for i in range(len(columns))
+            values[index].rjust(widths[index])
+            if columns[index].startswith("PP@")
+            else values[index].ljust(widths[index])
+            for index in range(len(columns))
         ]
         return "  ".join(parts).rstrip()
 
     header = f"{route}  | {day:%a %b} {day.day}, {day.year}"
-    rule = "  ".join("-" * w for w in widths)
+    rule = "  ".join("-" * width for width in widths)
     body = [line(row) for row in cells] or ["(nothing meets the constraints)"]
     return "\n".join([header, "", line(columns), rule, *body])
 
-
 def build_parser() -> argparse.ArgumentParser:
-    """Define the command line interface.
+    """Define the command-line interface.
 
     Returns:
-        The configured parser.
+        Configured argument parser.
     """
-    parser = argparse.ArgumentParser(description="Summarize a swept fare CSV.")
+    parser = argparse.ArgumentParser(description="Summarize a swept fare CSV by date.")
     _ = parser.add_argument("csv_path", help="CSV produced by fetch_flights.py")
     _ = parser.add_argument(
-        "--parties", nargs="+", type=int, default=[2], help="party sizes to price (default: 2)"
+        "--date",
+        type=iso_date,
+        help="show one departure date, YYYY-MM-DD (default: show every date)",
     )
-    _ = parser.add_argument("--max-price", type=int, help="per-person cap")
-    _ = parser.add_argument("--earliest-depart", help="earliest departure, HH:MM")
-    _ = parser.add_argument("--latest-arrive", help="latest same-day arrival, HH:MM")
     _ = parser.add_argument(
-        "--same-day", action="store_true", help="reject flights arriving the next day"
+        "--parties",
+        nargs="+",
+        type=positive_int,
+        help="party-size searches to show (default: every size in the CSV)",
+    )
+    _ = parser.add_argument("--max-price", type=positive_int, help="per-person cap")
+    _ = parser.add_argument("--earliest-depart", type=iso_clock, help="earliest departure, HH:MM")
+    _ = parser.add_argument("--latest-arrive", type=iso_clock, help="latest same-day arrival, HH:MM")
+    _ = parser.add_argument(
+        "--same-day", action="store_true", help="reject flights arriving after departure day"
+    )
+    _ = parser.add_argument(
+        "--allow-partial-data",
+        action="store_true",
+        help="analyze a dataset whose manifest says its sweep is incomplete",
     )
     return parser
 
+def _available_parties(flights: list[Flight]) -> list[int]:
+    """Return every party size present in a set of flights."""
+    return sorted({party for flight in flights for party in flight.fares})
+
+def load_cli_dataset(
+    parser: argparse.ArgumentParser, path: Path, allow_partial: bool
+) -> FareDataset:
+    """Load one CLI dataset and enforce its completeness policy.
+
+    Args:
+        parser: Active parser for reporting input errors.
+        path: Fare CSV path.
+        allow_partial: Whether an incomplete manifest is acceptable.
+
+    Returns:
+        Validated fare dataset.
+    """
+    if not path.is_file():
+        parser.error(f"not a readable fare CSV: {path}")
+    try:
+        dataset = load_dataset(path)
+    except (FareDataError, OSError) as exc:
+        parser.error(str(exc))
+    if dataset.info.complete is False and not allow_partial:
+        parser.error(
+            f"{path} is marked as an incomplete sweep; pass --allow-partial-data to continue"
+        )
+    return dataset
+
+def print_summary_tables(
+    route: str,
+    source_flights: list[Flight],
+    kept_flights: list[Flight],
+    parties: list[int],
+) -> None:
+    """Print one correctly labeled fare table per source date.
+
+    Args:
+        route: Route label.
+        source_flights: Flights before constraint filtering.
+        kept_flights: Flights that passed the constraints.
+        parties: Party-size columns to render.
+    """
+    kept_by_date = group_by_date(kept_flights)
+    source_by_date = group_by_date(source_flights)
+    for index, day in enumerate(sorted(source_by_date)):
+        if index:
+            print()
+        print(render(kept_by_date.get(day, []), parties, route, day))
+
+def print_excluded(flights: list[Flight], parties: list[int]) -> None:
+    """Print concise details for flights rejected by active constraints.
+
+    Args:
+        flights: Rejected flights.
+        parties: Party sizes used to choose the displayed price.
+    """
+    if not flights:
+        return
+    print(f"\nExcluded ({len(flights)}):")
+    for flight in sorted(flights, key=lambda item: item.depart_at):
+        prices = [flight.best_per_person(party) for party in parties]
+        usable = [price for price in prices if price is not None]
+        shown = format_money(min(usable), always_cents=True) if usable else "n/a"
+        schedule = (
+            f"{format_clock(flight.depart)} -> "
+            f"{format_clock(flight.arrive)}{arrival_suffix(flight)}"
+        )
+        print(
+            f"  {flight.flight_date}  {flight.airline:<9} {flight.flight:<14} "
+            f"{schedule:<25} {shown:>10}/pp"
+        )
 
 def main() -> int:
-    args = build_parser().parse_args()
+    parser = build_parser()
+    args = parser.parse_args()
     path = Path(cast(str, args.csv_path))
-    parties = sorted(cast(list[int], args.parties))
-    max_price = cast(int | None, args.max_price)
-    same_day = cast(bool, args.same_day)
-    earliest_raw = cast(str | None, args.earliest_depart)
-    latest_raw = cast(str | None, args.latest_arrive)
-    earliest = time.fromisoformat(earliest_raw) if earliest_raw else None
-    latest = time.fromisoformat(latest_raw) if latest_raw else None
-
-    if not path.exists():
-        print(f"no such file: {path}")
+    dataset = load_cli_dataset(parser, path, cast(bool, args.allow_partial_data))
+    if not dataset.flights:
+        print(f"{path} has no fare rows")
         return 1
-
-    flights = load_flights(path)
+    requested_parties = cast(list[int] | None, args.parties)
+    parties = sorted(set(requested_parties or _available_parties(dataset.flights)))
+    selected_date = cast(date | None, args.date)
+    flights = [
+        flight
+        for flight in dataset.flights
+        if selected_date is None or flight.flight_date == selected_date
+    ]
     if not flights:
-        print(f"{path} has no rows")
+        print(f"{path} has no flights for {selected_date}")
         return 1
-
-    kept = [f for f in flights if keeps(f, parties, max_price, earliest, latest, same_day)]
-    dropped = [f for f in flights if f not in kept]
-    route = route_from_filename(path)
-
-    print(render(kept, parties, route, flights[0].flight_date))
-    print("\n* cheaper booked as separate reservations")
-
-    if dropped:
-        print(f"\nExcluded ({len(dropped)}):")
-        for f in sorted(dropped, key=lambda x: x.depart):
-            price = f.best(parties[0])
-            shown = f"${price:,}" if price else "n/a"
-            arrive = f.arrive.strftime("%-I:%M %p") + ("+1" if f.arrives_next_day else "")
-            schedule = f"{f.depart:%-I:%M %p} -> {arrive}"
-            print(f"  {f.airline:<9} {f.flight:<8} {schedule:<22} {shown:>7}/pp")
+    max_price = cast(int | None, args.max_price)
+    earliest = cast(time | None, args.earliest_depart)
+    latest = cast(time | None, args.latest_arrive)
+    same_day = cast(bool, args.same_day)
+    kept = [
+        flight
+        for flight in flights
+        if keeps(flight, parties, max_price, earliest, latest, same_day)
+    ]
+    print_summary_tables(dataset.info.route, flights, kept, parties)
+    print("\n* split snapshot bound is lower than booking the party together")
+    print_excluded([flight for flight in flights if flight not in kept], parties)
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

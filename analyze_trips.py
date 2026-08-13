@@ -1,37 +1,30 @@
-"""Rank round-trip pairings by total airfare for a given number of full days.
-
-A full day is one spent entirely at the destination, so both travel days are
-excluded and the return date is the departure date plus full_days plus one.
-Optionally the stay must contain an anchor date, such as a holiday.
-
-Fare and split-booking math lives in summarize.py; this module pairs and ranks.
-
-Example:
-    uv run python analyze_trips.py \\
-        data/jfk_sfo_2026-11-16-2026-11-25_3pax.csv \\
-        data/sfo_jfk_2026-11-27-2026-12-06_3pax.csv \\
-        --full-days 9 10 --passengers 3 --max-price 1600 \\
-        --must-include 2026-11-26 --same-day-outbound \\
-        --earliest-return-departure 08:00
-"""
+"""Rank round-trip pairings by conservative total airfare."""
 
 from __future__ import annotations
 
 import argparse
-from collections import defaultdict
 from dataclasses import dataclass
 from datetime import date, time, timedelta
+from fractions import Fraction
 from pathlib import Path
 from typing import cast
 
-from summarize import Flight, load_flights, render
+from fare_data import (
+    DatasetInfo,
+    FareDataError,
+    Flight,
+    arrival_suffix,
+    format_money,
+    group_by_date,
+    load_dataset,
+)
+from summarize import iso_clock, iso_date, positive_int, render
 
 type DatePair = tuple[date, date]
 
-
 @dataclass(frozen=True)
 class Criteria:
-    """Everything that constrains which flights and pairings are acceptable."""
+    """Constraints controlling acceptable flights and trip pairings."""
 
     passengers: int
     full_days: tuple[int, ...]
@@ -45,94 +38,117 @@ class Criteria:
     latest_outbound_arrival: time | None = None
     earliest_return_departure: time | None = None
 
-
 @dataclass(frozen=True)
 class TripOption:
+    """One outbound and inbound pairing for a requested stay length."""
+
     outbound: Flight
     inbound: Flight
     full_days: int
     passengers: int
 
     @property
-    def per_person(self) -> int:
-        out = self.outbound.best(self.passengers) or 0
-        back = self.inbound.best(self.passengers) or 0
-        return out + back
+    def total(self) -> int:
+        """Return the conservative whole-unit total for both directions."""
+        outbound_total = self.outbound.best_total(self.passengers)
+        inbound_total = self.inbound.best_total(self.passengers)
+        if outbound_total is None or inbound_total is None:
+            raise ValueError("trip option contains an unpriced flight")
+        return outbound_total + inbound_total
 
     @property
-    def total(self) -> int:
-        return self.per_person * self.passengers
+    def per_person(self) -> Fraction:
+        """Return exact per-person cost from the conservative total."""
+        return Fraction(self.total, self.passengers)
 
     @property
     def needs_split(self) -> bool:
+        """Return whether either direction benefits from separate bookings."""
         return self.outbound.wants_split(self.passengers) or self.inbound.wants_split(
             self.passengers
         )
 
     @property
     def dates(self) -> DatePair:
+        """Return outbound and inbound departure dates."""
         return (self.outbound.flight_date, self.inbound.flight_date)
 
     @property
     def split_saving(self) -> int:
-        """Total saved across the party by booking seats separately."""
-        saving = 0
-        for leg in (self.outbound, self.inbound):
-            together = leg.together(self.passengers)
-            split = leg.split(self.passengers)
-            if together is not None and split is not None and split < together:
-                saving += (together - split) * self.passengers
-        return saving
+        """Return the conservative whole-unit saving across both directions."""
+        return self.outbound.split_saving(self.passengers) + self.inbound.split_saving(
+            self.passengers
+        )
 
+def nonnegative_int(raw: str) -> int:
+    """Parse a nonnegative command-line integer.
 
-def within_budget(flight: Flight, criteria: Criteria) -> bool:
-    """Check price and stop constraints shared by both directions.
+    Args:
+        raw: Argument text.
+
+    Returns:
+        A nonnegative integer.
+
+    Raises:
+        argparse.ArgumentTypeError: If the value is negative or not an integer.
+    """
+    try:
+        value = int(raw)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"expected an integer, got {raw!r}") from exc
+    if value < 0:
+        raise argparse.ArgumentTypeError("value cannot be negative")
+    return value
+
+def is_priced(flight: Flight, criteria: Criteria) -> bool:
+    """Check availability and stop constraints shared by both directions.
 
     Args:
         flight: Candidate flight.
         criteria: Active constraints.
 
     Returns:
-        True when the flight is bookable for the party within budget.
+        True when the party can be priced and the stop limit is satisfied.
     """
-    price = flight.best(criteria.passengers)
-    if price is None or flight.stops > criteria.max_stops:
-        return False
-    return criteria.max_price is None or price <= criteria.max_price
-
+    return (
+        flight.best_total(criteria.passengers) is not None
+        and flight.stops <= criteria.max_stops
+    )
 
 def passes_outbound_filters(flight: Flight, criteria: Criteria) -> bool:
-    """Check an outbound flight against the trip's constraints.
+    """Check an outbound flight against schedule constraints.
 
     Args:
         flight: Candidate outbound flight.
         criteria: Active constraints.
 
     Returns:
-        True if the flight is affordable and lands within the cutoff.
+        True when the flight satisfies every outbound constraint.
     """
-    if not within_budget(flight, criteria):
+    if not is_priced(flight, criteria):
         return False
     if criteria.same_day_outbound and flight.arrives_next_day:
         return False
     if criteria.depart_from and flight.flight_date < criteria.depart_from:
         return False
-    if criteria.latest_outbound_arrival and not flight.arrives_next_day:
-        return flight.arrive <= criteria.latest_outbound_arrival
+    if criteria.latest_outbound_arrival:
+        if flight.arrives_next_day:
+            return False
+        if flight.arrive > criteria.latest_outbound_arrival:
+            return False
     return True
 
-
 def passes_return_filters(flight: Flight, criteria: Criteria) -> bool:
-    """Check a return flight against the trip's constraints.
+    """Check a return flight against schedule constraints.
 
     Args:
         flight: Candidate return flight.
         criteria: Active constraints.
 
     Returns:
-        True if the flight is affordable and departs within the window.
+        True when the flight satisfies every return constraint.
     """
-    if not within_budget(flight, criteria):
+    if not is_priced(flight, criteria):
         return False
     if criteria.same_day_return and flight.arrives_next_day:
         return False
@@ -140,31 +156,10 @@ def passes_return_filters(flight: Flight, criteria: Criteria) -> bool:
         return flight.depart >= criteria.earliest_return_departure
     return True
 
-
-def group_by_date(flights: list[Flight]) -> dict[date, list[Flight]]:
-    """Bucket flights by departure date.
-
-    Args:
-        flights: Flights to group.
-
-    Returns:
-        Mapping of date to that date's flights, in schedule order.
-    """
-    grouped: dict[date, list[Flight]] = defaultdict(list)
-    for flight in flights:
-        grouped[flight.flight_date].append(flight)
-    for same_day in grouped.values():
-        same_day.sort(key=lambda f: f.depart)
-    return dict(grouped)
-
-
 def find_trip_options(
     outbound: list[Flight], inbound: list[Flight], full_days: int, criteria: Criteria
 ) -> list[TripOption]:
-    """Build the cheapest pairing for each valid date combination.
-
-    Reporting one option per date pair keeps results genuinely different trips
-    rather than several near-identical variants on the same two dates.
+    """Build the cheapest valid pairing for each date combination.
 
     Args:
         outbound: Filtered outbound flights.
@@ -173,70 +168,72 @@ def find_trip_options(
         criteria: Active constraints.
 
     Returns:
-        The cheapest option for each date pair, cheapest first.
+        One cheapest option per date pair, ordered by total price.
     """
     returns_by_date = group_by_date(inbound)
     cheapest: dict[DatePair, TripOption] = {}
     for out_flight in outbound:
-        return_date = out_flight.flight_date + timedelta(days=full_days + 1)
+        arrival_date = out_flight.arrive_at.date()
+        return_date = arrival_date + timedelta(days=full_days + 1)
         anchor = criteria.must_include
-        if anchor and not out_flight.flight_date < anchor < return_date:
+        if anchor and not arrival_date < anchor < return_date:
             continue
         for in_flight in returns_by_date.get(return_date, []):
             option = TripOption(out_flight, in_flight, full_days, criteria.passengers)
+            if (
+                criteria.max_price is not None
+                and option.total > criteria.max_price * criteria.passengers
+            ):
+                continue
             existing = cheapest.get(option.dates)
-            if existing is None or option.per_person < existing.per_person:
+            if existing is None or option.total < existing.total:
                 cheapest[option.dates] = option
-    return sorted(cheapest.values(), key=lambda o: (o.per_person, o.dates))
-
+    return sorted(cheapest.values(), key=lambda option: (option.total, option.dates))
 
 def format_leg(label: str, flight: Flight, passengers: int) -> str:
-    """Render one leg of a trip option as a single line.
+    """Render one direction of a trip option.
 
     Args:
-        label: Short prefix such as 'Out' or 'Back'.
-        flight: The flight to render.
-        passengers: Party size, for pricing.
+        label: Short prefix such as `Out` or `Back`.
+        flight: Flight to render.
+        passengers: Party size used for pricing.
 
     Returns:
-        A one-line summary of the leg.
+        One-line flight summary.
     """
-    arrive = flight.arrive.strftime("%H:%M")
-    if flight.arrives_next_day:
-        arrive += "+1"
-    price = flight.best(passengers) or 0
+    price = flight.best_per_person(passengers)
+    shown_price = format_money(price, always_cents=True) if price is not None else "n/a"
     marker = "*" if flight.wants_split(passengers) else ""
     fields = [
         f"     {label:<4}",
         f"{flight.flight_date:%a %b} {flight.flight_date.day}",
         f"{flight.airline} {flight.flight}",
-        f"{flight.depart:%H:%M} / {arrive}",
+        f"{flight.depart:%H:%M} / {flight.arrive:%H:%M}{arrival_suffix(flight)}",
         flight.aircraft,
         flight.cabin,
-        f"${price:,}{marker}",
+        f"{shown_price}{marker}",
     ]
     return "  ".join(fields)
 
-
 def describe_option(option: TripOption, rank: int) -> str:
-    """Render a single trip option as an indented block.
+    """Render one ranked trip option.
 
     Args:
-        option: The pairing to describe.
-        rank: 1-based position in the cheapest list.
+        option: Pairing to describe.
+        rank: One-based ranking.
 
     Returns:
-        A multi-line description.
+        Multi-line option description.
     """
     flags: list[str] = []
     if option.needs_split:
-        flags.append(f"book seats separately, saves ${option.split_saving:,}")
+        flags.append(f"separate bookings save at least {format_money(option.split_saving)}")
     if option.inbound.arrives_next_day:
         flags.append("red-eye return")
     suffix = f"  [{'; '.join(flags)}]" if flags else ""
     headline = (
-        f"  {rank}. ${option.per_person:,}/person  |  "
-        f"${option.total:,} for {option.passengers}{suffix}"
+        f"  {rank}. {format_money(option.per_person, always_cents=True)}/person  |  "
+        f"{format_money(option.total)} for {option.passengers}{suffix}"
     )
     return "\n".join(
         [
@@ -246,29 +243,27 @@ def describe_option(option: TripOption, rank: int) -> str:
         ]
     )
 
-
 def print_dump(route: str, flights: list[Flight], passengers: int) -> None:
-    """Print qualifying flights grouped by day.
+    """Print qualifying flights grouped by departure date.
 
     Args:
         route: Route label.
-        flights: Filtered flights for that direction.
-        passengers: Party size, for pricing.
+        flights: Filtered flights for one direction.
+        passengers: Party-size fare column to display.
     """
     grouped = group_by_date(flights)
     for day in sorted(grouped):
         print(render(grouped[day], [passengers], route, day))
         print()
 
-
 def build_parser() -> argparse.ArgumentParser:
-    """Define the command line interface.
+    """Define the command-line interface.
 
     Returns:
-        The configured parser.
+        Configured argument parser.
     """
     parser = argparse.ArgumentParser(
-        description="Rank round-trip pairings by total airfare.",
+        description="Rank round-trip pairings by conservative total airfare.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     _ = parser.add_argument("outbound", help="outbound CSV from fetch_flights.py")
@@ -276,119 +271,177 @@ def build_parser() -> argparse.ArgumentParser:
     _ = parser.add_argument(
         "--full-days",
         nargs="+",
-        type=int,
+        type=nonnegative_int,
         required=True,
-        help="day counts to evaluate, e.g. --full-days 9 10",
-    )
-    _ = parser.add_argument("--passengers", type=int, default=1, help="party size (default: 1)")
-    _ = parser.add_argument("--max-price", type=int, help="per-person cap")
-    _ = parser.add_argument(
-        "--max-stops", type=int, default=0, help="maximum stops per leg (default: 0)"
+        help="full day counts to evaluate, e.g. --full-days 6 7",
     )
     _ = parser.add_argument(
-        "--options", type=int, default=3, help="options to show per scenario (default: 3)"
+        "--passengers", type=positive_int, default=1, help="party size (default: 1)"
     )
     _ = parser.add_argument(
-        "--must-include", help="date the stay must contain, e.g. a holiday (YYYY-MM-DD)"
+        "--max-price",
+        type=positive_int,
+        help="maximum round-trip price per person",
     )
-    _ = parser.add_argument("--depart-from", help="earliest acceptable outbound date")
+    _ = parser.add_argument(
+        "--max-stops", type=nonnegative_int, default=0, help="maximum stops per leg (default: 0)"
+    )
+    _ = parser.add_argument(
+        "--options", type=positive_int, default=3, help="options to show per scenario (default: 3)"
+    )
+    _ = parser.add_argument(
+        "--must-include",
+        type=iso_date,
+        help="full date the stay must contain (YYYY-MM-DD)",
+    )
+    _ = parser.add_argument(
+        "--depart-from", type=iso_date, help="earliest acceptable outbound date"
+    )
     _ = parser.add_argument(
         "--same-day-outbound", action="store_true", help="outbound must land the same day"
     )
     _ = parser.add_argument(
         "--same-day-return", action="store_true", help="reject red-eye returns"
     )
-    _ = parser.add_argument("--latest-outbound-arrival", help="latest arrival, HH:MM")
-    _ = parser.add_argument("--earliest-return-departure", help="earliest departure, HH:MM")
+    _ = parser.add_argument(
+        "--latest-outbound-arrival",
+        type=iso_clock,
+        help="latest same-day arrival, HH:MM",
+    )
+    _ = parser.add_argument(
+        "--earliest-return-departure", type=iso_clock, help="earliest departure, HH:MM"
+    )
+    _ = parser.add_argument(
+        "--allow-partial-data",
+        action="store_true",
+        help="analyze datasets whose manifests say their sweeps are incomplete",
+    )
     _ = parser.add_argument(
         "--dump", action="store_true", help="also print every qualifying flight by day"
     )
     return parser
 
-
 def criteria_from_args(args: argparse.Namespace) -> Criteria:
     """Translate parsed arguments into a Criteria record.
 
     Args:
-        args: Parsed command line arguments.
+        args: Parsed command-line arguments.
 
     Returns:
-        The assembled constraints.
+        Assembled constraints.
     """
-    must_include = cast(str | None, args.must_include)
-    depart_from = cast(str | None, args.depart_from)
-    latest_arrival = cast(str | None, args.latest_outbound_arrival)
-    earliest_departure = cast(str | None, args.earliest_return_departure)
+    full_days = tuple(dict.fromkeys(cast(list[int], args.full_days)))
     return Criteria(
         passengers=cast(int, args.passengers),
-        full_days=tuple(cast(list[int], args.full_days)),
+        full_days=full_days,
         options=cast(int, args.options),
         max_price=cast(int | None, args.max_price),
         max_stops=cast(int, args.max_stops),
-        must_include=date.fromisoformat(must_include) if must_include else None,
-        depart_from=date.fromisoformat(depart_from) if depart_from else None,
+        must_include=cast(date | None, args.must_include),
+        depart_from=cast(date | None, args.depart_from),
         same_day_outbound=cast(bool, args.same_day_outbound),
         same_day_return=cast(bool, args.same_day_return),
-        latest_outbound_arrival=time.fromisoformat(latest_arrival) if latest_arrival else None,
-        earliest_return_departure=(
-            time.fromisoformat(earliest_departure) if earliest_departure else None
-        ),
+        latest_outbound_arrival=cast(time | None, args.latest_outbound_arrival),
+        earliest_return_departure=cast(time | None, args.earliest_return_departure),
     )
 
-
 def describe_criteria(criteria: Criteria) -> list[str]:
-    """Summarize the active constraints for the report header.
+    """Summarize active constraints for the report header.
 
     Args:
         criteria: Active constraints.
 
     Returns:
-        One line per constraint in effect.
+        One line per active constraint.
     """
     lines = [f"{criteria.passengers} passenger(s), max {criteria.max_stops} stop(s)"]
-    if criteria.max_price:
-        lines.append(f"Cap ${criteria.max_price:,}/person.")
+    if criteria.max_price is not None:
+        lines.append(f"Round-trip cap {format_money(criteria.max_price)}/person.")
     if criteria.must_include:
         anchor = criteria.must_include
-        lines.append(f"Stay must include {anchor:%a %b} {anchor.day}.")
+        lines.append(f"Stay must fully include {anchor:%a %b} {anchor.day}.")
     if criteria.depart_from:
         start = criteria.depart_from
         lines.append(f"Departing on or after {start:%a %b} {start.day}.")
     if criteria.same_day_outbound:
         lines.append("Outbound must land the same day.")
     if criteria.latest_outbound_arrival:
-        lines.append(f"Outbound arrives by {criteria.latest_outbound_arrival:%H:%M}.")
+        lines.append(f"Outbound arrives the same day by {criteria.latest_outbound_arrival:%H:%M}.")
     if criteria.earliest_return_departure:
         lines.append(f"Return departs {criteria.earliest_return_departure:%H:%M} or later.")
     if criteria.same_day_return:
         lines.append("Red-eye returns excluded.")
     return lines
 
+def validate_dataset_pair(outbound: DatasetInfo, inbound: DatasetInfo) -> str | None:
+    """Validate that two datasets form a reverse-route pair.
+
+    Args:
+        outbound: Outbound dataset metadata.
+        inbound: Inbound dataset metadata.
+
+    Returns:
+        An error message when incompatible, otherwise None.
+    """
+    if outbound.currency != inbound.currency:
+        return f"currency mismatch: {outbound.currency} outbound, {inbound.currency} inbound"
+    route_known = all(
+        [outbound.origin, outbound.destination, inbound.origin, inbound.destination]
+    )
+    if route_known and (
+        outbound.origin != inbound.destination or outbound.destination != inbound.origin
+    ):
+        return f"routes are not reverses: {outbound.route} and {inbound.route}"
+    return None
+
+def _load_cli_dataset(
+    parser: argparse.ArgumentParser, path: Path, allow_partial: bool
+) -> tuple[DatasetInfo, list[Flight]]:
+    """Load one CLI dataset and enforce completeness policy."""
+    if not path.is_file():
+        parser.error(f"not a readable fare CSV: {path}")
+    try:
+        dataset = load_dataset(path)
+    except (FareDataError, OSError) as exc:
+        parser.error(str(exc))
+    if dataset.info.complete is False and not allow_partial:
+        parser.error(
+            f"{path} is marked as an incomplete sweep; pass --allow-partial-data to continue"
+        )
+    if not dataset.flights:
+        parser.error(f"{path} contains no fare rows")
+    return (dataset.info, dataset.flights)
 
 def main() -> int:
-    args = build_parser().parse_args()
+    parser = build_parser()
+    args = parser.parse_args()
     criteria = criteria_from_args(args)
+    allow_partial = cast(bool, args.allow_partial_data)
     outbound_path = Path(cast(str, args.outbound))
     inbound_path = Path(cast(str, args.inbound))
+    outbound_info, outbound_all = _load_cli_dataset(parser, outbound_path, allow_partial)
+    inbound_info, inbound_all = _load_cli_dataset(parser, inbound_path, allow_partial)
+    incompatibility = validate_dataset_pair(outbound_info, inbound_info)
+    if incompatibility:
+        parser.error(incompatibility)
 
-    for path in (outbound_path, inbound_path):
-        if not path.exists():
-            print(f"missing data file: {path}")
-            return 1
-
-    outbound = [f for f in load_flights(outbound_path) if passes_outbound_filters(f, criteria)]
-    inbound = [f for f in load_flights(inbound_path) if passes_return_filters(f, criteria)]
-
+    outbound = [
+        flight for flight in outbound_all if passes_outbound_filters(flight, criteria)
+    ]
+    inbound = [flight for flight in inbound_all if passes_return_filters(flight, criteria)]
     print("=" * 74)
     for entry in describe_criteria(criteria):
         print(entry)
     print("=" * 74)
-    print(f"\n{len(outbound)} qualifying outbound flights, {len(inbound)} qualifying returns")
+    print(
+        f"\n{len(outbound)} schedule-qualifying outbound flights, "
+        f"{len(inbound)} schedule-qualifying returns"
+    )
 
     if cast(bool, args.dump):
         print()
-        print_dump("OUTBOUND", outbound, criteria.passengers)
-        print_dump("RETURN", inbound, criteria.passengers)
+        print_dump(outbound_info.route, outbound, criteria.passengers)
+        print_dump(inbound_info.route, inbound, criteria.passengers)
 
     for full_days in criteria.full_days:
         options = find_trip_options(outbound, inbound, full_days, criteria)
@@ -401,9 +454,8 @@ def main() -> int:
             print()
         print(f"  ({len(options)} valid date pairings in total)")
 
-    print("\n* cheaper booked as separate reservations")
+    print("\n* separate bookings have a lower snapshot-model upper bound")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

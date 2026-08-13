@@ -5,7 +5,7 @@ Finds the cheap seats a booking engine hides when you ask for more than one.
 ## The problem
 
 Search a flight for one passenger and you might see $180. Search the same
-flight for two and the per-person price jumps to $208. Nothing changed except
+flight for two and the per-seat price jumps to $208.50. Nothing changed except
 your party size.
 
 That's because airlines sell seats in **fare buckets**, each holding a limited
@@ -13,45 +13,58 @@ number of seats. When you book several passengers on one reservation, the
 airline prices everyone in the cheapest bucket deep enough to hold the whole
 party. One orphan seat at $180 is invisible to a two-person search.
 
-Real economy fares from `data/`, JFK↔SFO over Thanksgiving 2026:
+Real economy fares from `data/`, JFK↔SFO over Thanksgiving 2026. Every price
+below is **per seat**; each column changes only the number of passengers in
+the search:
 
-| Flight  | Date   | 1 seat | 2 seats | 3 seats | Seats in the cheap bucket |
-|---------|--------|--------|---------|---------|---------------------------|
-| B6 1515 | Nov 24 | $180   | $359    | $539    | at least 3                |
-| AA 177  | Nov 24 | $180   | $417    | $626    | exactly 1                 |
-| AS 1542 | Nov 22 | $340   | $679    | $1,166  | exactly 2                 |
-| DL 669  | Nov 29 | $829   | $1,657  | $3,131  | exactly 2                 |
+| Flight  | Date   | Search for 1 | Search for 2 | Search for 3 | Cheap bucket depth |
+|---------|--------|-------------:|-------------:|-------------:|--------------------|
+| B6 1515 | Nov 24 |      $180.00 |      $179.50 |      $179.67 | at least 3         |
+| AA 177  | Nov 24 |      $180.00 |      $208.50 |      $208.67 | exactly 1          |
+| AS 1542 | Nov 22 |      $340.00 |      $339.50 |      $388.67 | exactly 2          |
+| DL 669  | Nov 29 |      $829.00 |      $828.50 |    $1,043.67 | exactly 2          |
+
+SerpApi reports a whole-dollar party total, so dividing it back into seats can
+produce small 33- or 50-cent movements within what is effectively one bucket.
+The large jumps are the signal.
 
 Look at the first two rows. Search either flight for one passenger and you see
 **the same $180**. They are not the same. B6 1515 has at least three seats at
-that price; AA 177 has exactly one, and a second passenger reprices *both* to
-$208.
+roughly that price; AA 177 has exactly one, and a second passenger reprices
+*both* to $208.50 each.
 
-The last row is the expensive case. Nov 29 is the Sunday after Thanksgiving,
-the busiest travel day of the year. Two seats cost $828 each, but asking for
-three moves the whole party to $1,044 each. Book a pair and a single instead
-and you pay $1,657 + $1,044 = $2,701 rather than $3,131 — **$430 saved on the
-same three seats on the same flight**.
+The last row is the expensive case. Two seats average $828.50 each, but asking
+for three moves the whole party to $1,043.67 each. Under the snapshot model,
+separate bookings have an upper bound of $2,701.17. `farebucket` rounds that
+bound up to $2,702 before comparing it with the $3,131 group total, so it
+reports a conservative whole-dollar saving of **$429**.
 
 None of this is visible from a normal search, because a search for three
 people never shows you the price for one.
 
 `farebucket` finds these automatically by querying every party size from 1 to
-N and comparing. In the bundled sample, 16 of 240 flights reward splitting.
+N and comparing. In the bundled three-passenger sample, 18 of 240 flights have
+a positive whole-dollar split saving under the snapshot model.
 
 ## How it works
 
-For a party of N, let `f(k)` be the cheapest per-seat fare in a bucket holding
-at least `k` seats, so `f(k) = P(k) / k`. These rise monotonically.
+For a party of N, let `P(k)` be the observed total when searching for `k`
+passengers, and let `f(k) = P(k) / k` be its exact per-seat value. The economic
+fare ladder should rise with bucket depth, although whole-dollar API totals can
+introduce the small sub-dollar reversals visible in the table.
 
 ```
-booking together:    N * f(N)
-booking separately:  at most  f(1) + f(2) + ... + f(N)
+booking together:       P(N)
+separate snapshot bound: f(1) + f(2) + ... + f(N)
 ```
 
-The separate-booking figure is an **upper bound**, not an estimate: after
-`k-1` seats are taken, the `f(k)` bucket provably still has one left. So the
-reported saving is a floor.
+The bound follows because, in one unchanged inventory snapshot, a bucket deep
+enough for `k` seats still has at least one seat after `k-1` are removed. It is
+conditional on every search identifying the same itinerary and cabin, and on
+inventory not changing between searches or bookings. The API cannot provide an
+atomic snapshot, so treat the result as a decision aid rather than a checkout
+guarantee. The code preserves exact fractions, rounds the modeled split cost
+up, and rounds the resulting saving down.
 
 ## Setup
 
@@ -89,7 +102,7 @@ You can check your remaining balance any time:
 
 ```bash
 curl -s "https://serpapi.com/account?api_key=$(cat SERPAPI_KEY.txt)" \
-  | python3 -m json.tool | grep -E 'usage|left'
+  | uv run python -m json.tool | grep -E 'usage|left'
 ```
 
 ### Storing the key
@@ -112,7 +125,14 @@ Writes `data/jfk_sfo_2026-11-20-2026-11-25_3pax.csv`.
 
 `--sweep` is the important flag: it queries party sizes 1 through `--adults`,
 which is what makes bucket detection possible. Without it you get one price
-per flight and no way to know how deep the bucket goes.
+per flight and no way to know how deep the bucket goes. Sweeps bypass SerpApi's
+cache by default to reduce capture-time skew. This costs a search for every
+request; pass `--allow-cache` only when that tradeoff is acceptable.
+
+The fetcher writes a `.csv.meta.json` sidecar recording the route, currency,
+query matrix, freshness settings, timestamps, and whether every search
+succeeded. A failed search prevents output from being replaced unless you
+explicitly pass `--allow-partial`.
 
 Cost is `dates x cabins x party sizes` searches. The example above is 18.
 
@@ -123,17 +143,26 @@ Cost is `dates x cabins x party sizes` searches. The example above is 18.
 | `--max-price` | per-person cap; deferred to analysis when sweeping |
 | `--adults` | party size |
 | `--sweep` | query every party size from 1 to `--adults` |
+| `--allow-cache` | permit cached results during a sweep |
+| `--deep-search` | request slower results matching the browser |
+| `--allow-partial` | write and mark an incomplete search matrix |
 | `--key-file` | alternate path to the API key |
 | `--output` | override the auto-generated path; `-` for stdout |
 
-### 2. Inspect a day
+Multiple cabins and connecting itineraries are retained independently using a
+fingerprint of every flight segment, airport, timestamp, and cabin.
+
+### 2. Inspect per-seat fares
 
 ```bash
 uv run python summarize.py data/sfo_jfk_2026-11-27-2026-12-02_3pax.csv \
-    --parties 2 3 --max-price 500
+    --date 2026-12-01 --parties 1 2 3 --max-price 500
 ```
 
-One price column per party size. An asterisk means separate reservations win.
+`PP@1`, `PP@2`, and `PP@3` are the observed per-seat prices when searching for
+one, two, or three passengers. An asterisk means the conservative split bound
+is lower than booking that party together. Omit `--date` to print one correctly
+labeled table for every date in the CSV.
 
 ### 3. Rank trips
 
@@ -150,13 +179,13 @@ Against the bundled data that returns:
 ```
 6 FULL DAYS AT DESTINATION
 --------------------------------------------------------------------------
-  1. $432/person  |  $1,296 for 3
-     Out   Tue Nov 24  JetBlue B6 1515  06:35 / 10:09  Airbus A320  Economy  $180
-     Back  Tue Dec 1  Alaska AS 30  06:18 / 15:03  Boeing 737  Economy  $252
+  1. $431.67/person  |  $1,295 for 3
+     Out   Tue Nov 24  JetBlue B6 1515  06:35 / 10:09  Airbus A320  Economy  $179.67
+     Back  Tue Dec 1  Alaska AS 30  06:18 / 15:03  Boeing 737  Economy  $252.00
 
-  2. $449/person  |  $1,347 for 3  [book seats separately, saves $3]
-     Out   Wed Nov 25  Alaska AS 41  20:29 / 23:59  Boeing 737  Economy  $269
-     Back  Wed Dec 2  Alaska AS 1543  09:05 / 17:49  Boeing 737  Economy  $180*
+  2. $448.33/person  |  $1,345 for 3
+     Out   Wed Nov 25  Alaska AS 41  20:29 / 23:59  Boeing 737  Economy  $268.67
+     Back  Wed Dec 2  JetBlue B6 16  13:20 / 22:00  Airbus A320  Economy  $179.67
 ```
 
 A **full day** is one spent entirely at the destination, so both travel days
@@ -170,6 +199,7 @@ trip around a holiday.
 |------|---------|
 | `--full-days` | day counts to evaluate |
 | `--passengers` | party size |
+| `--max-price` | maximum round-trip price per person |
 | `--must-include` | date the stay must contain |
 | `--depart-from` | earliest acceptable outbound date |
 | `--same-day-outbound` | outbound must land the same calendar day |
@@ -177,16 +207,18 @@ trip around a holiday.
 | `--latest-outbound-arrival` | arrival cutoff, `HH:MM` |
 | `--earliest-return-departure` | departure cutoff, `HH:MM` |
 | `--options` | how many to show per scenario |
+| `--allow-partial-data` | analyze a CSV explicitly marked incomplete |
 | `--dump` | also print every qualifying flight by day |
 
 ## Caveats
 
 - **Separate reservations mean separate records.** If a flight cancels, the
   airline treats your party as unrelated passengers with independent
-  rebooking. Weigh that against the saving — in the bundled data it ranges
-  from $3 to $430.
-- **The split price assumes no repricing** between bookings. Inventory is
-  live; transactions seconds apart usually hold, but nothing guarantees it.
+  rebooking. Weigh that against the saving — the modeled whole-dollar floor in
+  the bundled three-passenger data ranges from $1 to $429.
+- **The split bound assumes stable inventory.** Fresh searches reduce cache
+  skew, but searches and purchases are still sequential. Availability or price
+  can move between them.
 - **Each direction is priced as a one-way and summed.** Standard for domestic
   US itineraries, but worth spot-checking against a round-trip search on
   routes where that doesn't hold.
@@ -194,6 +226,22 @@ trip around a holiday.
 
 The `data/` directory holds real JFK/SFO fares so you can try `summarize.py`
 and `analyze_trips.py` without an API key.
+
+## Development checks
+
+The regression suite uses only `unittest`:
+
+```bash
+uv run python -m unittest discover -s tests -v
+```
+
+Strict static checking is configured in `pyrightconfig.json` and can be run
+without adding a runtime dependency:
+
+```bash
+uv run --with basedpyright basedpyright
+uv run --with ruff ruff check .
+```
 
 ## License
 
