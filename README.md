@@ -145,12 +145,21 @@ Cost is `dates x cabins x party sizes` searches. The example above is 18.
 | `--sweep` | query every party size from 1 to `--adults` |
 | `--allow-cache` | permit cached results during a sweep |
 | `--deep-search` | request slower results matching the browser |
+| `--include-basic` | keep Basic Economy fares (excluded by default) |
 | `--allow-partial` | write and mark an incomplete search matrix |
 | `--key-file` | alternate path to the API key |
 | `--output` | override the auto-generated path; `-` for stdout |
 
 Multiple cabins and connecting itineraries are retained independently using a
 fingerprint of every flight segment, airport, timestamp, and cabin.
+
+Economy searches leave out Basic Economy by default, so the price shown is the
+cheapest fare with free seat selection and a carry-on rather than the
+stripped-down fare airlines use to rank lower. Pass `--include-basic` to get
+the bare-bones price instead; fetch once each way to compare the two. SerpApi
+only applies the filter to US domestic economy searches, and it does not cover
+checked bags. The sidecar records the setting as `exclude_basic`. The bundled
+`data/` files predate this and include Basic Economy fares.
 
 ### 2. Inspect per-seat fares
 
@@ -162,7 +171,28 @@ uv run python summarize.py data/sfo_jfk_2026-11-27-2026-12-02_3pax.csv \
 `PP@1`, `PP@2`, and `PP@3` are the observed per-seat prices when searching for
 one, two, or three passengers. An asterisk means the conservative split bound
 is lower than booking that party together. Omit `--date` to print one correctly
-labeled table for every date in the CSV.
+labeled table for every date in the CSV. `--earliest-depart` and
+`--latest-depart` (both `HH:MM`, inclusive) narrow the table to a departure
+window; `--latest-arrive` caps the arrival time.
+
+Add `--email` for a narrow plain-text version meant for pasting into a
+message. It keeps the times, flight, and per-seat prices, states the filters
+and fare type above the table, and leaves out the aircraft, notes, and
+excluded-flight list:
+
+```
+EWR -> SFO | Mon Jan 4, 2027
+Nonstop, Economy, departing 9:00 AM to 5:00 PM
+Price per person, Basic Economy fares excluded
+
+Depart    Arrive    Flight          Price
+--------  --------  --------------  -----
+9:00 AM   12:30 PM  United UA 1777   $435
+10:00 AM  1:36 PM   United UA 548    $503
+```
+
+The columns line up in a fixed-width font; in a proportional font each row
+still reads left to right as time, flight, price.
 
 ### 3. Rank trips
 

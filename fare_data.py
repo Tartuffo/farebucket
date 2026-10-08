@@ -45,6 +45,7 @@ class DatasetInfo:
     currency: str
     complete: bool | None
     schema_version: int | None
+    exclude_basic: bool | None = None
 
     @property
     def route(self) -> str:
@@ -398,6 +399,7 @@ def load_dataset(path: Path) -> FareDataset:
             currency=currency or "USD",
             complete=complete,
             schema_version=schema_version,
+            exclude_basic=_manifest_bool(manifest, "exclude_basic"),
         ),
         flights=flights,
     )

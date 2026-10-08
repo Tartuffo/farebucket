@@ -17,7 +17,10 @@ from fetch_flights import (
     SearchJob,
     SerpApiResponse,
     SweepResult,
+    build_parser,
+    build_query,
     collect_records,
+    config_from_args,
     decode_response,
     dedupe,
     itinerary_to_record,
@@ -111,6 +114,29 @@ class ItineraryIdentityTests(unittest.TestCase):
         with self.assertRaises(InvalidResponseError):
             _ = decode_response({"best_flights": "not an array"})
 
+class BasicEconomyTests(unittest.TestCase):
+    """Ensure Basic Economy is excluded by default and only where SerpApi allows it."""
+
+    def test_filter_is_sent_for_economy_and_omitted_for_other_cabins(self) -> None:
+        day = date(2026, 11, 20)
+        economy = build_query("JFK", "SFO", day, "1", 1, 0, "key", exclude_basic=True)
+        business = build_query("JFK", "SFO", day, "3", 1, 0, "key", exclude_basic=True)
+        with_basic = build_query("JFK", "SFO", day, "1", 1, 0, "key")
+
+        self.assertIn("exclude_basic=true", economy)
+        self.assertNotIn("exclude_basic", business)
+        self.assertNotIn("exclude_basic", with_basic)
+
+    def test_basic_fares_are_excluded_unless_requested(self) -> None:
+        parser = build_parser()
+        base = ["JFK", "SFO", "--start", "2026-11-20"]
+
+        default = config_from_args(parser, parser.parse_args(base))
+        opted_in = config_from_args(parser, parser.parse_args([*base, "--include-basic"]))
+
+        self.assertTrue(default.exclude_basic)
+        self.assertFalse(opted_in.exclude_basic)
+
 class CompletenessTests(unittest.TestCase):
     """Ensure failed sweeps do not replace authoritative data."""
 
@@ -133,6 +159,7 @@ class CompletenessTests(unittest.TestCase):
                 max_price=None,
                 fresh=False,
                 deep_search=False,
+                exclude_basic=True,
                 allow_partial=False,
                 key_file=Path("unused"),
                 output=str(output),

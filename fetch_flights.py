@@ -23,6 +23,7 @@ from fare_data import format_clock, manifest_path
 
 API_URL = "https://serpapi.com/search.json"
 ONE_WAY = "2"
+ECONOMY_CODE = "1"
 SCHEMA_VERSION = 2
 
 HERE = Path(__file__).parent
@@ -155,6 +156,7 @@ class SweepManifest(TypedDict):
     failures: list[str]
     fresh: bool
     deep_search: bool
+    exclude_basic: bool
     started_at: str
     finished_at: str
 
@@ -198,6 +200,7 @@ class FetchConfig:
     max_price: int | None
     fresh: bool
     deep_search: bool
+    exclude_basic: bool
     allow_partial: bool
     key_file: Path
     output: str | None
@@ -328,6 +331,7 @@ def build_query(
     *,
     fresh: bool = False,
     deep_search: bool = False,
+    exclude_basic: bool = False,
 ) -> str:
     """Assemble one SerpApi request URL.
 
@@ -341,6 +345,8 @@ def build_query(
         api_key: SerpApi key.
         fresh: Whether to bypass SerpApi's cache.
         deep_search: Whether to request browser-equivalent results.
+        exclude_basic: Whether to drop Basic Economy fares. SerpApi rejects
+            the filter outside economy, so other cabins ignore it.
 
     Returns:
         Fully encoded request URL.
@@ -364,6 +370,8 @@ def build_query(
         params["no_cache"] = "true"
     if deep_search:
         params["deep_search"] = "true"
+    if exclude_basic and cabin_code == ECONOMY_CODE:
+        params["exclude_basic"] = "true"
     return f"{API_URL}?{urllib.parse.urlencode(params)}"
 
 def decode_response(decoded: object) -> SerpApiResponse:
@@ -761,6 +769,7 @@ def fetch_jobs(
     *,
     fresh: bool,
     deep_search: bool,
+    exclude_basic: bool,
 ) -> SweepResult:
     """Execute a search matrix and retain query-level failures.
 
@@ -773,6 +782,7 @@ def fetch_jobs(
         api_key: SerpApi key.
         fresh: Whether to bypass cached responses.
         deep_search: Whether to request browser-equivalent results.
+        exclude_basic: Whether to drop Basic Economy fares from economy searches.
 
     Returns:
         Collected records, failures, and success count.
@@ -791,6 +801,7 @@ def fetch_jobs(
             api_key,
             fresh=fresh,
             deep_search=deep_search,
+            exclude_basic=exclude_basic,
         )
         outcome = request_flights(url)
         label = f"{job.day} cabin {job.cabin_code} party {job.party}"
@@ -874,6 +885,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="request slower results matching the Google Flights browser",
     )
     _ = parser.add_argument(
+        "--include-basic",
+        action="store_true",
+        help="keep Basic Economy fares in economy searches (excluded by default)",
+    )
+    _ = parser.add_argument(
         "--allow-partial",
         action="store_true",
         help="write successful searches even if part of the matrix fails",
@@ -900,6 +916,7 @@ def build_manifest(
     result: SweepResult,
     fresh: bool,
     deep_search: bool,
+    exclude_basic: bool,
     started_at: str,
 ) -> SweepManifest:
     """Assemble a sidecar manifest for one fetch run.
@@ -915,6 +932,7 @@ def build_manifest(
         result: Sweep execution result.
         fresh: Whether caching was bypassed.
         deep_search: Whether deep search was enabled.
+        exclude_basic: Whether Basic Economy fares were excluded from economy searches.
         started_at: Client start timestamp.
 
     Returns:
@@ -936,6 +954,7 @@ def build_manifest(
         failures=result.failures,
         fresh=fresh,
         deep_search=deep_search,
+        exclude_basic=exclude_basic,
         started_at=started_at,
         finished_at=_utc_now(),
     )
@@ -1021,6 +1040,7 @@ def config_from_args(parser: argparse.ArgumentParser, args: argparse.Namespace) 
         max_price=cast(int | None, args.max_price),
         fresh=sweep and not cast(bool, args.allow_cache),
         deep_search=cast(bool, args.deep_search),
+        exclude_basic=not cast(bool, args.include_basic),
         allow_partial=cast(bool, args.allow_partial),
         key_file=Path(cast(str, args.key_file)),
         output=cast(str | None, args.output),
@@ -1049,6 +1069,8 @@ def execute_fetch(
         warn(f"  --sweep: {format_currency(config.max_price)} cap deferred to analysis")
     if config.fresh:
         warn("  --sweep: bypassing cached results to reduce snapshot skew")
+    if config.exclude_basic and ECONOMY_CODE in config.cabin_codes:
+        warn("  economy: Basic Economy fares excluded (--include-basic keeps them)")
 
     started_at = _utc_now()
     result = fetch_jobs(
@@ -1060,6 +1082,7 @@ def execute_fetch(
         api_key,
         fresh=config.fresh,
         deep_search=config.deep_search,
+        exclude_basic=config.exclude_basic,
     )
     unique = dedupe(result.records)
     warn(f"{len(unique)} unique itinerary fares after dedupe")
@@ -1100,6 +1123,7 @@ def write_fetch_result(
         result,
         config.fresh,
         config.deep_search,
+        config.exclude_basic,
         started_at,
     )
     if config.output == "-":

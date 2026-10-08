@@ -70,6 +70,21 @@ class FilterTests(unittest.TestCase):
 
         self.assertFalse(passes_outbound_filters(flight, criteria))
 
+    def test_summary_departure_window_is_inclusive(self) -> None:
+        day = date(2026, 11, 20)
+        flights = [
+            make_flight(day, hour, datetime(2026, 11, 20, hour + 3, 0), {1: 100}, f"EA {hour}")
+            for hour in (8, 9, 17, 18)
+        ]
+
+        kept = [
+            flight.flight
+            for flight in flights
+            if summarize.keeps(flight, [1], None, time(9, 0), None, False, time(17, 0))
+        ]
+
+        self.assertEqual(kept, ["EA 9", "EA 17"])
+
     def test_max_price_caps_the_round_trip_not_each_leg(self) -> None:
         out_day = date(2026, 11, 20)
         back_day = date(2026, 11, 22)
@@ -174,6 +189,34 @@ class SummaryIntegrationTests(unittest.TestCase):
         self.assertEqual(rendered.count("SFO -> JFK  |"), 6)
         self.assertIn("Fri Nov 27, 2026", rendered)
         self.assertIn("Wed Dec 2, 2026", rendered)
+
+    def test_email_output_is_narrow_and_drops_the_excluded_list(self) -> None:
+        csv_path = REPOSITORY / "data" / "sfo_jfk_2026-11-27-2026-12-02_3pax.csv"
+        output = io.StringIO()
+        arguments = ["summarize.py", str(csv_path), "--max-price", "900", "--email"]
+
+        with patch("sys.argv", arguments), redirect_stdout(output):
+            result = summarize.main()
+
+        rendered = output.getvalue()
+        self.assertEqual(result, 0)
+        self.assertEqual(rendered.count("SFO -> JFK |"), 6)
+        self.assertLessEqual(max(len(line) for line in rendered.splitlines()), 72)
+        self.assertIn("* may be cheaper booked as separate reservations", rendered)
+        self.assertNotIn("Excluded", rendered)
+
+    def test_email_heading_states_filters_and_fare_type(self) -> None:
+        day = date(2027, 1, 4)
+        flight = make_flight(day, 9, datetime(2027, 1, 4, 12, 30), {1: 435}, "UA 1777")
+        info = DatasetInfo(Path("fares.csv"), "EWR", "SFO", "USD", True, 2, exclude_basic=True)
+        filters = summarize.describe_filters(None, time(9, 0), time(17, 0), None)
+
+        lines = summarize.render_email([flight], [1], info, day, filters).splitlines()
+
+        self.assertEqual(lines[0], "EWR -> SFO | Mon Jan 4, 2027")
+        self.assertEqual(lines[1], "Nonstop, Economy, departing 9:00 AM to 5:00 PM")
+        self.assertEqual(lines[2], "Price per person, Basic Economy fares excluded")
+        self.assertEqual(lines[-1], "9:00 AM  12:30 PM  Example UA 1777   $435")
 
 if __name__ == "__main__":
     unittest.main()
